@@ -49,22 +49,22 @@ var FilterInput = React.createClass({
     input.focus();
   },
   addHint: function () {
-    var value = this.state.filterText;
-    value = value && value.trim();
-    if (value) {
-      var list = this.allHintList;
-      var index = list.indexOf(value);
-      if (index !== -1) {
-        list.splice(index, 1);
-      }
-      if (list.length > MAX_LEN) {
-        list.splice(0, 1);
-      }
-      list.push(value);
-      try {
-        storage.set(this.props.hintKey, JSON.stringify(list));
-      } catch (e) {}
-    }
+    // var value = this.state.filterText;
+    // value = value && value.trim();
+    // if (value) {
+    //   var list = this.allHintList;
+    //   var index = list.indexOf(value);
+    //   if (index !== -1) {
+    //     list.splice(index, 1);
+    //   }
+    //   if (list.length > MAX_LEN) {
+    //     list.splice(0, 1);
+    //   }
+    //   list.push(value);
+    //   try {
+    //     storage.set(this.props.hintKey, JSON.stringify(list));
+    //   } catch (e) {}
+    // }
   },
   filterHints: function (keyword) {
     keyword = keyword && keyword.trim();
