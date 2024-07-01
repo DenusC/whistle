@@ -101,7 +101,21 @@ function parseKeywordList(keyword) {
   return result;
 }
 
+function parseMultiKeywordList(keyword) {
+  const parsedKeywords = [];
+  const keywords = keyword.split(/[|]{2}|[&]{2}/);
+    keywords.forEach((keyword, index) => {
+      parsedKeywords.push({
+        keyword,
+        parsedKeywords: parseKeywordList(keyword)
+      })
+    });
+    return parsedKeywords;
+}
+
 proto.search = function (keyword) {
+  this._multi_keyword = parseMultiKeywordList(keyword);
+  this._origin_keyword = keyword;
   this._keyword = parseKeywordList(keyword);
   this.filter();
   return keyword;
@@ -252,18 +266,33 @@ function toStr(val) {
   return val + '';
 }
 
+function  checkItemRow(item, opts) {
+  return checkItem(item, opts[0]) || (opts[1] && checkItem(item, opts[1])) || (opts[2] && checkItem(item, opts[2]))
+}
 proto.filter = function () {
   var self = this;
   var list = self.list;
   var keyword = self._keyword;
+  var multi_keyword = self._multi_keyword;
   list.forEach(function (item) {
-    if (keyword) {
-      item.hide =
-        checkItem(item, keyword[0]) ||
-        (keyword[1] && checkItem(item, keyword[1])) ||
-        (keyword[2] && checkItem(item, keyword[2]));
-    } else {
-      item.hide = false;
+    // if (keyword) {
+    //   item.hide =
+    //     checkItem(item, keyword[0]) ||
+    //     (keyword[1] && checkItem(item, keyword[1])) ||
+    //     (keyword[2] && checkItem(item, keyword[2]));
+    // } else {
+    //   item.hide = false;
+    // }
+    var _row_origin_keyword = self._origin_keyword;
+    item.hide = false;
+    if (multi_keyword && multi_keyword.length !== 0) {
+      try {
+        self._multi_keyword.forEach((kw) => {
+          _row_origin_keyword = _row_origin_keyword.replace(kw.keyword, !checkItemRow(item, kw.parsedKeywords));
+        })
+        item.hide = !eval(_row_origin_keyword);
+      } catch(e) {
+      }
     }
   });
 

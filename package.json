@@ -62,7 +62,7 @@
     "xml2js": "0.5.0"
   },
   "scripts": {
-    "dev": "webpack --config ./biz/webui/htdocs/src/webpack.config -w",
+    "dev": "webpack --config ./biz/webui/htdocs/src/webpack.config",
     "start": "node bin/whistle.js run",
     "test": "npm run lintfix && node test/index.test.js",
     "lint": "eslint *.js ./lib ./bin ./biz ./test ./docs/script",
